@@ -1,4 +1,14 @@
 # Queen Bee — TP 1 : Lecture des mesures
+# Queen Bee — API REST (Jour 1)
+
+**Auteur :** Soufiane Benhabboul
+
+## Installation et lancement
+
+```bash
+npm install
+npm run dev
+``` 
 
 ## Résultats des mesures
 
