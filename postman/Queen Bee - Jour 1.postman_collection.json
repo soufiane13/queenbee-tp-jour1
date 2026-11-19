@@ -7,7 +7,93 @@
   },
   "item": [
     {
-      "name": "New Request",
+      "name": "GET Health check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/health",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "health"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET All hives",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/hives",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "hives"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Hives filtered by site_id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/hives?site_id=SN-CASA",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "hives"
+          ],
+          "query": [
+            {
+              "key": "site_id",
+              "value": "SN-CASA"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Hive by ID (found)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/hives/SN-CASA-001",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "hives",
+            "SN-CASA-001"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Hive by ID (404 not found)",
       "request": {
         "method": "GET",
         "header": [],
@@ -28,7 +114,7 @@
       "response": []
     },
     {
-      "name": "http://localhost:3000/api/hives/SN-CASA-001/measures",
+      "name": "POST Measure (201 created)",
       "request": {
         "method": "POST",
         "header": [],
@@ -53,6 +139,170 @@
             "hives",
             "SN-CASA-001",
             "measures"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST Measure (400 missing timestamp)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"weight_kg\": 36.84\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/hives/SN-CASA-001/measures",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "hives",
+            "SN-CASA-001",
+            "measures"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Hive measures (paginated 200)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/hives/SN-CASA-001/measures?limit=2&offset=0",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "hives",
+            "SN-CASA-001",
+            "measures"
+          ],
+          "query": [
+            {
+              "key": "limit",
+              "value": "2"
+            },
+            {
+              "key": "offset",
+              "value": "0"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Hive measures (400 invalid limit)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/hives/SN-CASA-001/measures?limit=0",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "hives",
+            "SN-CASA-001",
+            "measures"
+          ],
+          "query": [
+            {
+              "key": "limit",
+              "value": "0"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST Inspection (201 created)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"inspected_at\": \"2026-10-31T11:30:00Z\",\r\n  \"colony_status\": \"normale\",\r\n  \"queen_present\": true,\r\n  \"observations\": \"Couvain régulier\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/hives/SN-CASA-001/inspections",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "hives",
+            "SN-CASA-001",
+            "inspections"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Hive inspections (200)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/hives/SN-CASA-001/inspections",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "hives",
+            "SN-CASA-001",
+            "inspections"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Unknown route (404)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/does-not-exist",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "does-not-exist"
           ]
         }
       },
