@@ -9,7 +9,8 @@
 // Puis, dans un second terminal : node tp/tp1-lecture/sonde.js bloquant (ou flux)
 
 import express from "express";
-import { existsSync } from "node:fs";
+import { createReadStream, existsSync, readFileSync } from "node:fs";
+import { createInterface } from "node:readline";
 
 const FICHIER = process.argv[2] ?? "data/mesures-SN-CASA-2026-10-31.ndjson";
 
@@ -27,15 +28,49 @@ app.get("/ping", (req, res) => {
   res.json({ pong: true });
 });
 
-// À ÉCRIRE : POST /import/bloquant
-// 1. Lire tout le fichier avec readFileSync (import depuis "node:fs").
-// 2. Le découper en lignes, en ignorant les lignes vides.
-// 3. Analyser chaque ligne avec JSON.parse et additionner les weight_kg.
-// 4. Répondre { mesures, poids_moyen_kg, duree_ms } (duree_ms : mesurée avec performance.now()).
+app.post("/import/bloquant", (req, res) => {
+  const debut = performance.now();
+  const contenu = readFileSync(FICHIER, "utf8");
+  const lignes = contenu.split(/\r?\n/);
 
-// À ÉCRIRE : POST /import/flux
-// Le même calcul, en lisant le fichier avec createReadStream (node:fs) et
-// createInterface (node:readline), puis une boucle for await … of sur les lignes.
+  let mesures = 0;
+  let sommePoids = 0;
+
+  for (const ligne of lignes) {
+    if (!ligne.trim()) continue;
+    const objet = JSON.parse(ligne);
+    sommePoids += objet.weight_kg;
+    mesures += 1;
+  }
+
+  const duree_ms = Math.round(performance.now() - debut);
+  const poids_moyen_kg = mesures > 0 ? Number((sommePoids / mesures).toFixed(2)) : 0;
+
+  res.json({ mesures, poids_moyen_kg, duree_ms });
+});
+
+app.post("/import/flux", async (req, res) => {
+  const debut = performance.now();
+  const lignes = createInterface({
+    input: createReadStream(FICHIER, { encoding: "utf8" }),
+    crlfDelay: Infinity,
+  });
+
+  let mesures = 0;
+  let sommePoids = 0;
+
+  for await (const ligne of lignes) {
+    if (!ligne.trim()) continue;
+    const objet = JSON.parse(ligne);
+    sommePoids += objet.weight_kg;
+    mesures += 1;
+  }
+
+  const duree_ms = Math.round(performance.now() - debut);
+  const poids_moyen_kg = mesures > 0 ? Number((sommePoids / mesures).toFixed(2)) : 0;
+
+  res.json({ mesures, poids_moyen_kg, duree_ms });
+});
 
 app.listen(4000, () => {
   console.log(`Serveur du TP 1 sur http://localhost:4000, fichier : ${FICHIER}`);

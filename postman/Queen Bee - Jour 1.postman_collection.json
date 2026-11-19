@@ -1,0 +1,62 @@
+{
+  "info": {
+    "_postman_id": "3e1edd06-cd68-4551-86f5-0cadc8f6e773",
+    "name": "Queen Bee - Jour 1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "23585821"
+  },
+  "item": [
+    {
+      "name": "New Request",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/hives/XX-NOPE-999",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "hives",
+            "XX-NOPE-999"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:3000/api/hives/SN-CASA-001/measures",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"hive_id\": \"SN-CASA-001\",\r\n  \"site_id\": \"SN-CASA\",\r\n  \"timestamp\": \"2026-10-31T10:00:00Z\",\r\n  \"position_lat\": 12.5743,\r\n  \"position_lon\": -16.2873,\r\n  \"weight_kg\": 36.84,\r\n  \"temp_internal_c\": 34.4,\r\n  \"temp_external_c\": 27.1,\r\n  \"humidity_pct\": 64,\r\n  \"acoustic_activity_score\": 0.42,\r\n  \"battery_pct\": 88\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/hives/SN-CASA-001/measures",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "hives",
+            "SN-CASA-001",
+            "measures"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
