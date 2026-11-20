@@ -22,9 +22,12 @@ if (storage === "postgres" && !db.password) {
   process.exit(1);
 }
 
+const jwtSecret = process.env.JWT_SECRET ?? "dev-secret-change-me";
+
 export const config = {
   port: Number.isNaN(port) ? 3000 : port,
   storage,
+  jwtSecret,
   db: {
     ...db,
     port: Number.isNaN(db.port) ? 5432 : db.port,

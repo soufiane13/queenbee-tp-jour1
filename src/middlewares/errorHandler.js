@@ -2,6 +2,8 @@ import { AppError } from "../errors.js";
 
 const TITLES = {
   400: "Requête invalide",
+  401: "Non authentifié",
+  403: "Accès interdit",
   404: "Ressource introuvable",
   409: "Conflit",
   413: "Contenu trop volumineux",
