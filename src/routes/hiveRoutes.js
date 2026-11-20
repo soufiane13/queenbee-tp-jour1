@@ -6,6 +6,7 @@ import {
   measureSchema,
   paginationSchema,
   inspectionSchema,
+  syncLotSchema,
 } from "../validators/schemas.js";
 import {
   listHives,
@@ -14,6 +15,7 @@ import {
   listHiveMeasures,
   listHiveInspections,
   addHiveInspection,
+  syncLot,
 } from "../services/hiveService.js";
 
 const router = Router();
@@ -62,6 +64,17 @@ router.post(
   async (req, res) => {
     const inspection = await addHiveInspection(req.params.id, req.validated);
     return res.status(201).json(inspection);
+  }
+);
+
+router.post(
+  "/sync",
+  authenticate,
+  authorize("admin", "operator"),
+  validate(syncLotSchema),
+  async (req, res) => {
+    const result = await syncLot(req.validated);
+    return res.status(201).json(result);
   }
 );
 

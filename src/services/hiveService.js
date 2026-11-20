@@ -78,3 +78,26 @@ export function addHiveInspection(hiveId, payload = {}) {
 
   return createInspection(inspection);
 }
+
+export function syncLot(payload = {}) {
+  const items = payload.inspections ?? [];
+  const imported = [];
+
+  for (const item of items) {
+    const hive = requireHive(item.hive_id);
+    const inspection = {
+      id: item.id,
+      hive_id: hive.id,
+      inspected_at: item.inspected_at,
+      colony_status: item.colony_status,
+      ...(item.queen_present !== undefined ? { queen_present: item.queen_present } : {}),
+      ...(item.observations !== undefined ? { observations: item.observations } : {}),
+    };
+    imported.push(createInspection(inspection));
+  }
+
+  return {
+    imported_count: imported.length,
+    inspections: imported,
+  };
+}

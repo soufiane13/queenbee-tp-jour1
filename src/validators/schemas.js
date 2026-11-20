@@ -37,3 +37,10 @@ export const inspectionSchema = Joi.object({
   queen_present: Joi.boolean().allow(null),
   observations: Joi.string().max(2000).allow("", null),
 });
+
+export const syncLotSchema = Joi.object({
+  inspections: Joi.array()
+    .items(inspectionSchema.fork(["hive_id"], (field) => field.required()))
+    .min(1)
+    .required(),
+});
