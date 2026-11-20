@@ -1,32 +1,30 @@
-import express from "express";
-import hiveRoutes from "./routes/hiveRoutes.js";
-import { notFoundHandler, errorHandler } from "./middlewares/errorHandler.js";
+import { config } from "./config.js";
+import { createApp } from "./app.js";
+import { createMemoryRepositories } from "./repositories/memory/index.js";
+import { createPostgresRepositories } from "./repositories/postgres/index.js";
+import { createPool } from "./db.js";
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+let repositories;
 
-app.use(express.json());
-
-app.use((req, res, next) => {
-  const debut = performance.now();
-  res.on("finish", () => {
-    const dureeMs = Math.round(performance.now() - debut);
-    console.log(
-      `${new Date().toISOString()} ${req.method} ${req.originalUrl} -> ${res.statusCode} (${dureeMs} ms)`
+if (config.storage === "postgres") {
+  const pool = createPool();
+  try {
+    await pool.query("SELECT 1");
+  } catch (err) {
+    console.error(
+      `Impossible de joindre PostgreSQL sur ${config.db.host}:${config.db.port} : ${err.message || err.code}`
     );
-  });
-  next();
-});
+    process.exit(1);
+  }
+  repositories = createPostgresRepositories(pool);
+} else {
+  repositories = createMemoryRepositories();
+}
 
-app.get("/health", (req, res) => {
-  res.status(200).json({ status: "ok" });
-});
+const app = createApp(repositories);
 
-app.use("/api", hiveRoutes);
-
-app.use(notFoundHandler);
-app.use(errorHandler);
-
-app.listen(PORT, () => {
-  console.log(`Serveur TP 4 en écoute sur http://localhost:${PORT}`);
+app.listen(config.port, () => {
+  console.log(
+    `API Queen Bee sur http://localhost:${config.port} (stockage : ${config.storage})`
+  );
 });
