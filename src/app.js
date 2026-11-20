@@ -26,6 +26,7 @@ export function createApp(_repositories) {
 
   app.use(notFoundHandler);
   app.use(errorHandler);
+  app.use(express.json({ limit: "1mb" }));
 
   return app;
 }
